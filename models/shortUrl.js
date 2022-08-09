@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const ShortUrlSchema = new Schema({
-  url: {
+  original_url: {
     type: String,
     required: true,
   },
-  shortUrl: {
+  short_url: {
     type: Number,
     required: true,
   },

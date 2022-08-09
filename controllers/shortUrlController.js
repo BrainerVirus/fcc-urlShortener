@@ -10,8 +10,8 @@ export const createShortUrl = async (req, res) => {
       if (!valid.test(url)) return res.json({ error: "invalid url" });
       if (err) return res.json({ error: "URL Does not exist" });
       const info = {
-        url: req.body.url,
-        shortUrl: Math.floor(Math.random() * 1000000),
+        original_url: req.body.url,
+        short_url: Math.floor(Math.random() * 1000000),
       };
       const urlToShort = ShortUrl.create(info).then(() => {
         console.log("this is the url:", req.body.url);
@@ -26,8 +26,8 @@ export const createShortUrl = async (req, res) => {
 export const getShortUrl = async (req, res) => {
   try {
     const shortUrl = req.params.id;
-    const url = await ShortUrl.findOne({ shortUrl: shortUrl });
-    res.redirect(url.url);
+    const url = await ShortUrl.findOne({ short_url: shortUrl });
+    res.redirect(url.original_url);
   } catch (error) {
     res.json({ error: error });
   }
