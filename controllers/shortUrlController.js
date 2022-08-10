@@ -1,14 +1,15 @@
 import ShortUrl from "../models/shortUrl.js";
 import dns from "dns";
+import urlParser from "url";
 
 export const createShortUrl = async (req, res) => {
   try {
-    var valid = /^(ftp|http|https):\/\/[^ "]+$/;
+    var valid = /^(https):\/\/[^ "]+$/;
     const url = req.body.url;
-    const cleanUrlFronHtpps = url.replace(/^(ftp|http|https)?:\/\//, "");
-    dns.lookup(cleanUrlFronHtpps, (err, address, family) => {
-      if (!valid.test(url)) return res.json({ error: "invalid url" });
-      if (err) return res.json({ error: "URL Does not exist" });
+    const cleanUrlFronHtpps = url.replace(/^(https)?:\/\//, "");
+    dns.lookup(urlParser.parse(url).hostname, (err, address, family) => {
+      // if (!valid.test(url)) return res.json({ error: "invalid url" });
+      if (!address) res.json({ error: "invalid url" });
       const info = {
         original_url: req.body.url,
         short_url: Math.floor(Math.random() * 1000000),
